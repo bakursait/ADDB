@@ -27,6 +27,16 @@ def get_show_list():
     return template ("show_list",rows=result)
 
 
+@get("/status/<id:int>/<value:int>")
+def get_status(id, value):
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("update todo set status = ? where id = ?", (value, id))
+    connection.commit()
+    cursor.close()
+    redirect("/")
+
+
 @get('/new_item')
 def get_new_item():
     return template ("new_item")

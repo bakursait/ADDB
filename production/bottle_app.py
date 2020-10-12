@@ -32,6 +32,16 @@ def get_show_list():
     return template ("show_list",rows=result)
 
 
+@get("/set_status/<id:int>/<value:int>")
+def get_set_status(id, value):
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("update todo set status = ? where id = ?", (value, id))
+    connection.commit()
+    cursor.close()
+    redirect("/")
+
+
 @get('/new_item')
 def get_new_item():
     return template ("new_item")
@@ -48,6 +58,30 @@ def post_new_item():
     # return str(result)
     # return "the new item is: ["+ new_item +"]..."
     redirect("/")
+
+@get('/update_item/<id:int>')
+def get_update_item(id):
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("select * from todo where id =?",(id,))
+    result = cursor.fetchall()
+    cursor.close()
+    return template ("update_item", row=result[0])
+
+
+@post('/update_item')
+def post_update_item():
+    id = int(request.forms.get("id").strip())
+    updated_item = request.forms.get("update_item").strip()
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("update todo set task = ? where id =? ", (str(updated_item), id))
+    connection.commit()
+    cursor.close()
+    # return str(result)
+    # return "the new item is: ["+ new_item +"]..."
+    redirect("/")
+
 
 @get('/delete_item/<id:int>')
 def get_delete_item(id):
