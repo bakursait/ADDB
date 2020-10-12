@@ -44,6 +44,10 @@ def post_new_item():
     # return "the new item is: ["+ new_item +"]..."
     redirect("/")
 
+@get('/delete_item/<id:int>')
+def get_delete_item(id):
+    print("We want to delet ", id)    
+
 if ON_PYTHONANYWHERE:
     pass
 else:

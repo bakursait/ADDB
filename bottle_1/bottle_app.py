@@ -49,6 +49,17 @@ def post_new_item():
     # return "the new item is: ["+ new_item +"]..."
     redirect("/")
 
+@get('/delete_item/<id:int>')
+def get_delete_item(id):
+    print("We want to delete ", id)
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("delete from todo where id =?", (id,))
+    connection.commit()
+    cursor.close()
+    # return str(result)
+    # return "the new item is: ["+ new_item +"]..."
+    redirect("/")
 
 if ON_PYTHONANYWHERE:
     #on PA, connect to the WSGI server
